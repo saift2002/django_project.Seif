@@ -1,0 +1,100 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Fawry pay </title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Marhey&display=swap" rel="stylesheet">  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'store.css' %}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+</head>
+  
+<body>
+    <div class="profile-card">
+        <div class="profile-card-header">
+            <div class="profile-image"></div>
+    
+            <div class="profile-info">
+                <h3 class="profile-name">Ahmend Maher</h3>
+            </div>
+          </div>
+          
+        <div class="profile-card-body">
+          <form method="POST" action="{% url 'update_expenses' %}">
+            {% csrf_token %}
+            <ul class="status">
+              <li>
+                <input class="labo" type="text" name="money" min="0" value="0" >
+                <span class="status-text">تحديث المصاريف</span>
+              </li>
+              <li style="margin-top:10px ;">
+                {% for lala in money %}
+                <span class="status-value">${{ lala.total_money }}</span>
+                {% endfor %}
+                <span class="status-text">:الرصيد</span>
+              </li>
+              <span class="mint-green-circle">
+                <i class="fas fa-money-bill mint-green"></i>
+              </span>
+            </ul>
+    
+            <div class="action">
+              <button type="submit" name="button1" class="btn btn-pink">تحديث</button>
+              <button type="submit" name="button2" class="btn btn-white">تعديل</button>
+            </div>
+          </form>
+      </div>
+    </div>
+    <div>
+        <table>
+          <thead>
+            <tr>
+              <th class="status-text">الصوره</th>
+              <th class="status-text">رقم المكينه</th>
+              <th class="status-text">الاسم </th>
+              <th class="status-text">الرصيد الاستهلاكي </th>
+              <th class="status-text">التحصيل </th>
+              <th class="status-text">باقي</th>
+              <th class="status-text">المكسب</th>
+              <th class="status-text">الرصيد </th>
+              <th class="status-text">تحصيل رصيد</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for obj in fawry %}
+            <tr>
+              <td><a href="{% url 'details' obj.id %}"><img src="{% static 'images/unnamed.png' %}" alt="Image" style="width: 100px;"></a></td>
+              <td class="status-text">{{ obj.id }}</td>
+              <td class="status-text">{{ obj.name }}</td>
+              <td class="status-text">{{ obj.money_borrowed }}</td>
+              <td class="status-text">{{ obj.money_payed_back }}</td>
+              <td class="status-text">{{ obj.difference|floatformat:2 }}</td>
+            <form method="POST" action="{% url 'add_transaction' obj.id %}">
+                {% csrf_token %}
+                <td class="status-text">
+                  <select class="status-text" name="payment_type" id="">
+                    <option value="كاش">كاش</option>
+                    <option value="فوري">فوري</option>
+                  </select>
+                </td>
+                <td>
+                  <input type="number" name="amount" value="0" min="0">
+                </td>
+                <td>
+                  <input type="number" name="amount1" value="0" min="0">
+                </td>
+                <td>
+                  <button type="submit" class="status-text submit-btn">تحويل </button>
+                </td>
+              </form>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+    </div>
+</body>
+</html>

@@ -1,0 +1,98 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ماكينه خاصه </title>
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Marhey&display=swap" rel="stylesheet">
+	<link rel="preconnect" href="https://fonts.googleapis.com">  
+    <link rel="stylesheet" href="{% static 'stylepage-1.css' %}">
+</head>
+<body>
+    <main class="main">
+		<form action="">
+			<label class="label" for="name">تم التحويل </label>
+			<input type="text" class="name" placeholder="Enter expense name" name="name" value="{{ fawry.money_borrowed }}" disabled>
+			<label class="label" for="amount">تم الدفع  </label>
+			<input type="number" class="amount" placeholder="Enter Amount" name="expense" value="{{ fawry.money_payed_back}}" disabled>
+		</form>
+		<div class="row">
+			<div class="selectOption">
+			</div>
+			<div class="searchBox">
+				<input type="text" name="search" placeholder="Search .." class="searchName">
+			</div>
+		</div>
+		<div class="table-responsive">
+			<table class="expense-data">
+				<tbody>
+					<tr>
+						<th>الاسم</th>
+						<th>الرصيد الكلي </th>
+						<th>تم الدفع</th>
+						<th>نوع التحويل</th>
+						<th>التاريح</th>
+					</tr>
+					{% for lili in transaction %}
+					<tr style>
+						<td>{{fawry.name}}</td>
+						<td>{{lili.amount_spent}}</td>
+						<td>{{lili.amount_received}}</td>
+						<td>{{lili.profit}}</td>
+						<td>{{lili.date}}</td>
+						
+					</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</main>
+    <script >
+		document.querySelector('.searchName').addEventListener('keyup',function(e){
+			let filter = document.querySelector('.searchName').value.toUpperCase();
+			let expTable = document.querySelector('.expense-data');
+			let expTr = expTable.getElementsByTagName('tr');
+			for(let i = 0; i < expTr.length; i++){
+				let expName = expTr[i].getElementsByTagName('td')[4]; 
+				if(expName){
+					console.log(expName);
+					let txtVal = expName.textContent || expName.innerHTML;
+					if(txtVal.toUpperCase().indexOf(filter) > -1){
+						expTr[i].style.display = '';
+
+					}else{
+						expTr[i].style.display = 'none';
+					}
+				}
+			}
+		});
+		const nameInput = document.querySelector('.name');
+		const expenseInput = document.querySelector('.amount');
+		const selectOptionDiv = document.querySelector('.selectOption');
+		const nameValue = parseFloat(nameInput.value);
+		const expenseValue = parseFloat(expenseInput.value);
+
+		selectOptionDiv.innerHTML = ''; // Clear previous label
+
+		if (nameValue > expenseValue) {
+		const indeptLabel = document.createElement('label');
+		indeptLabel.innerHTML = 'لم يتم التسديد كاملا';
+		indeptLabel.classList.add('label');
+		indeptLabel.style.color = 'red';
+		selectOptionDiv.appendChild(indeptLabel);
+		} else {
+		const deptFreeLabel = document.createElement('label');
+		deptFreeLabel.innerHTML = 'تم التسديد كاملا';
+		deptFreeLabel.classList.add('label');
+		deptFreeLabel.style.color = 'green';
+		selectOptionDiv.appendChild(deptFreeLabel);
+		}
+		
+
+    </script>
+</body>
+</html>
